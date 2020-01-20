@@ -54,6 +54,7 @@ void display_bm_ih(bm_ihd*);
 void paint(bm_file*, char*, void (*)(uint16_t*, uint16_t*, uint16_t*, uint16_t*));
 void grayscale(uint16_t*, uint16_t*, uint16_t*, uint16_t*);
 void invert1(uint16_t*, uint16_t*, uint16_t*, uint16_t*);
+void invert2(uint16_t*, uint16_t*, uint16_t*, uint16_t*);
 
 
 #endif // ifndef CIM_H

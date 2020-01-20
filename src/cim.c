@@ -89,7 +89,7 @@ void paint(bm_file* file, char* to, void (*func)(uint16_t* r, uint16_t* g, uint1
             lines_read++;
         } else {
             uint8_t size = file->image_header->bpp / 8 % 4 == 0 ? file->image_header->bpp / 32 : file->image_header->bpp / 24;
-            uint16_t r, g, b, a;
+            uint16_t r, g, b, a = 0;
             fread(&b, size, 1, file->file);
             fread(&g, size, 1, file->file);
             fread(&r, size, 1, file->file);
@@ -122,4 +122,16 @@ void grayscale(uint16_t* r, uint16_t* g, uint16_t* b, uint16_t* a) {
 void invert1(uint16_t* r, uint16_t* g, uint16_t* b, uint16_t* a) {
     uint16_t temp = *r;
     *r = *g; *g = *b; *b = temp;
+}
+
+void invert2(uint16_t* r, uint16_t* g, uint16_t* b, uint16_t* a) {
+    if(a != 0) {
+        *r = *a - *r;
+        *g = *a - *g;
+        *b = *a - *b;
+    } else {
+        *r = 255 - *r;
+        *g = 255 - *g;
+        *b = 255 - *b;
+    }
 }
