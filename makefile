@@ -1,14 +1,18 @@
 CC=gcc
 CFLAGS=-Wextra -Wall -pedantic
 
-all: cim.o test
+all: filters opencim test
 
-cim.o: src/cim.c
-	$(CC) $(CFLAGS) -c src/cim.c -o cim.o
+opencim: src/cim.c libs/filters.o
+	$(CC) $(CFLAGS) -c src/cim.c libs/filters.o -o cim.o
 	mv -f cim.o libs/
 
-test: test/bm_test.c cim.o
-	$(CC) $(CFLAGS) test/bm_test.c libs/cim.o -o test/bm_test
+filters: src/filters.c
+	$(CC) $(CFLAGS) -c src/filters.c -o filters.o
+	mv -f filters.o libs/
+
+test: test/bm_test.c libs/cim.o libs/filters.o
+	$(CC) $(CFLAGS) test/bm_test.c libs/cim.o libs/filters.o -o test/bm_test
 
 clean:
 	rm -f test/bm_test libs/*

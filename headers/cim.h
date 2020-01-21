@@ -6,8 +6,6 @@
 #include <stdint.h> // int8_t, uint8_t... etc
 #include <string.h> // memcpy
 
-#define FUNC_THRESHOLD 30
-
 // Default bmp file header size
 #define BM_DEFAULT_FH_SIZE 14
 // Default bmp image header size
@@ -54,15 +52,5 @@ void close(bm_file*);
 void display_bm_fh(bm_fhd*);
 void display_bm_ih(bm_ihd*);
 void paint(bm_file*, char*, void (*)(uint16_t*, uint16_t*, uint16_t*, uint16_t*));
-void grayscale(uint16_t*, uint16_t*, uint16_t*, uint16_t*);
-void invert1(uint16_t*, uint16_t*, uint16_t*, uint16_t*);
-void invert2(uint16_t*, uint16_t*, uint16_t*, uint16_t*);
-void red_filter(uint16_t*, uint16_t*, uint16_t*, uint16_t*);
-void green_filter(uint16_t*, uint16_t*, uint16_t*, uint16_t*);
-void blue_filter(uint16_t*, uint16_t*, uint16_t*, uint16_t*);
-void red_channel(uint16_t*, uint16_t*, uint16_t*, uint16_t*);
-void green_channel(uint16_t*, uint16_t*, uint16_t*, uint16_t*);
-void blue_channel(uint16_t*, uint16_t*, uint16_t*, uint16_t*);
-
 
 #endif // ifndef CIM_H
