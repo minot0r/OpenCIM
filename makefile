@@ -7,7 +7,7 @@ cim.o: src/cim.c
 	$(CC) $(CFLAGS) -c src/cim.c -o cim.o
 	mv -f cim.o libs/
 
-test: test/bm_test.c libs/cim.o
+test: test/bm_test.c cim.o
 	$(CC) $(CFLAGS) test/bm_test.c libs/cim.o -o test/bm_test
 
 clean:

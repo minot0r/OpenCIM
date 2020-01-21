@@ -89,7 +89,7 @@ void paint(bm_file* file, char* to, void (*func)(uint16_t* r, uint16_t* g, uint1
             lines_read++;
         } else {
             uint8_t size = file->image_header->bpp / 8 % 4 == 0 ? file->image_header->bpp / 32 : file->image_header->bpp / 24;
-            uint16_t r, g, b, a = 0;
+            uint16_t r = 0, g = 0, b = 0, a = 0;
             fread(&b, size, 1, file->file);
             fread(&g, size, 1, file->file);
             fread(&r, size, 1, file->file);
@@ -108,7 +108,6 @@ void paint(bm_file* file, char* to, void (*func)(uint16_t* r, uint16_t* g, uint1
                 
             bytes_read += file->image_header->bpp / 8;
         }
-        printf("Bytes read %db\n", bytes_read);
     }
 
     fclose(output_file);
@@ -134,4 +133,61 @@ void invert2(uint16_t* r, uint16_t* g, uint16_t* b, uint16_t* a) {
         *g = 255 - *g;
         *b = 255 - *b;
     }
+}
+
+void red_filter(uint16_t* r, uint16_t* g, uint16_t* b, uint16_t* a) {
+    uint16_t mean = (*r + *g + *b) / 3;
+    if(*r < 255 - FUNC_THRESHOLD) {
+        *r = mean;
+    }    
+    *g = mean;
+    *b = mean;
+}
+
+void green_filter(uint16_t* r, uint16_t* g, uint16_t* b, uint16_t* a) {
+    uint16_t mean = (*r + *g + *b) / 3;
+    if(*g < 255 - FUNC_THRESHOLD) {
+        *g = mean;
+    }    
+    *r = mean;
+    *b = mean;
+}
+
+void blue_filter(uint16_t* r, uint16_t* g, uint16_t* b, uint16_t* a) {
+    uint16_t mean = (*r + *g + *b) / 3;
+    if(*b < 255 - FUNC_THRESHOLD) {
+        *b = mean;
+    }    
+    *g = mean;
+    *r = mean;     
+}
+
+void red_channel(uint16_t* r, uint16_t* g, uint16_t* b, uint16_t* a) {
+    if(*r > 255 - FUNC_THRESHOLD) {
+        *r = 255;
+    } else {
+        *r = 0;
+    }
+    *g = 0;
+    *b = 0;
+}
+
+void green_channel(uint16_t* r, uint16_t* g, uint16_t* b, uint16_t* a) {
+    if(*g > 255 - FUNC_THRESHOLD) {
+        *g = 255;
+    } else {
+        *g = 0;
+    }
+    *r = 0;
+    *b = 0;
+}
+
+void blue_channel(uint16_t* r, uint16_t* g, uint16_t* b, uint16_t* a) {
+    if(*b > 255 - FUNC_THRESHOLD) {
+        *b = 255;
+    } else {
+        *b = 0;
+    }
+    *r = 0;
+    *g = 0;
 }
