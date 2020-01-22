@@ -2,8 +2,9 @@
 #include "../headers/cim.h"
 #include "../headers/filters.h"
 
-int main(void) {
-    bm_file* file = open("files/graph.bmp");
+int main(int argc, char* argv[]) {
+    if(argc < 2) exit(1);
+    bm_file* file = bm_open(argv[1]);
     display_bm_fh(file->file_header);
     display_bm_ih(file->image_header);
     printf("Computing...\n");
@@ -15,7 +16,7 @@ int main(void) {
     paint(file, "files/6.bmp", green_channel);
     paint(file, "files/7.bmp", grayscale);
     paint(file, "files/8.bmp", invert2);
-    close(file);
+    bm_close(file);
     printf("Done.\n");
     return 0;
 }

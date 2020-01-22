@@ -11,8 +11,9 @@ filters: src/filters.c
 	$(CC) $(CFLAGS) -c src/filters.c -o filters.o
 	mv -f filters.o libs/
 
-test: test/bm_test.c libs/cim.o libs/filters.o
+test: test/bm_test.c test/png_test.c libs/cim.o libs/filters.o
 	$(CC) $(CFLAGS) test/bm_test.c libs/cim.o libs/filters.o -o test/bm_test
+	$(CC) $(CFLAGS) test/png_test.c libs/cim.o libs/filters.o -o test/png_test
 
 clean:
-	rm -f test/bm_test libs/*
+	rm -f test/*_test libs/*

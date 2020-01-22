@@ -1,6 +1,6 @@
 #include "../headers/cim.h"
 
-bm_file* open(char* file_name) {
+bm_file* bm_open(char* file_name) {
     FILE* file_ptr = fopen(file_name, "rb+"); // Open for both reading and writing in binary mode.
     if(file_ptr == NULL) {
         fprintf(stderr, "Error while trying to open %s. Code: %d.", file_name, ERR_FILE_OPEN);
@@ -47,7 +47,7 @@ bm_file* open(char* file_name) {
     return bmfile;
 }
 
-void close(bm_file* file) {
+void bm_close(bm_file* file) {
     fclose(file->file);
     free(file->file_header);
     free(file->image_header);
@@ -111,4 +111,45 @@ void paint(bm_file* file, char* to, void (*func)(uint16_t* r, uint16_t* g, uint1
     }
 
     fclose(output_file);
+}
+
+png_file* png_open(char* file_name) {
+    FILE* file_ptr = fopen(file_name, "rb+");
+
+    if(file_ptr == NULL) {
+        fprintf(stderr, "Error while trying to open %s. Code: %d.", file_name, ERR_FILE_OPEN);
+        exit(ERR_FILE_OPEN);
+    }
+
+    png_file_header_object fho;
+    png_fhd* file_header = malloc(sizeof(png_fhd));
+
+    if(file_header == NULL) {
+        fprintf(stderr, "Can't allocate memory for png_fhd. Code: %d.", ERR_NO_MEM);
+        exit(ERR_NO_MEM);
+    }
+
+    fread(file_header->signature, sizeof(uint8_t), 8, file_ptr);
+    fread(&fho, PNG_DEFAULT_FH_SIZE - 8, 1, file_ptr);
+
+    file_header->h_size = (uint16_t) PNG_DEFAULT_FH_SIZE;
+
+    png_file* pngfile = malloc(sizeof(png_file));
+
+    if(pngfile == NULL) {
+        fprintf(stderr, "Can't allocate memory for png_file. Code: %d", ERR_NO_MEM);
+        exit(ERR_NO_MEM);
+    }
+
+    pngfile->file_header = file_header;
+
+    return pngfile;
+}
+
+void display_png_fh(png_fhd* fhd) {
+    printf("Signature : ");
+    for(int i = 0; i < 8; i++) {
+        printf("%d ", fhd->signature[i]);
+    }
+    printf("\n");
 }

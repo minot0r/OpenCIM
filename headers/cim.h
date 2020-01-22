@@ -1,3 +1,5 @@
+// PNG is pronounced ping
+
 #ifndef CIM_H
 #define CIM_H
 
@@ -11,6 +13,9 @@
 // Default bmp image header size
 #define BM_DEFAULT_IH_SIZE 40
 
+// Default png file header size
+#define PNG_DEFAULT_FH_SIZE 14
+
 #define ERR_FILE_OPEN 1
 #define ERR_NO_MEM 2
 
@@ -23,6 +28,12 @@ typedef struct bm_fhd {
     uint16_t h_size;
     uint32_t f_size;
 } bm_fhd;
+
+typedef struct png_fhd {
+    uint16_t h_size;
+    uint16_t f_size;
+    uint8_t signature[8];
+} png_fhd;
 
 /*
  * BitMap Image header data
@@ -44,13 +55,22 @@ typedef struct bm_file {
     FILE*  file;
 } bm_file;
 
+typedef struct png_file {
+    png_fhd* file_header;
+} png_file;
+
 typedef char bm_file_header_object[BM_DEFAULT_FH_SIZE];
 typedef char bm_image_header_object[BM_DEFAULT_IH_SIZE];
 
-bm_file* open(char*);
-void close(bm_file*);
+typedef char png_file_header_object[PNG_DEFAULT_FH_SIZE];
+
+bm_file* bm_open(char*);
+void bm_close(bm_file*);
 void display_bm_fh(bm_fhd*);
 void display_bm_ih(bm_ihd*);
 void paint(bm_file*, char*, void (*)(uint16_t*, uint16_t*, uint16_t*, uint16_t*));
+
+png_file* png_open(char*);
+void display_png_fh(png_fhd*);
 
 #endif // ifndef CIM_H
